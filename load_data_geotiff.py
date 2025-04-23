@@ -53,14 +53,14 @@ class LoadData:
                 dem = src.read(1)  # Read the first band
                 self.transform = src.transform  # Store georeferencing transform
                 self.crs = src.crs  # Store coordinate reference system
-                self.nodata = -9999
+                # self.nodata = -9999
                 
                 # Replace NoData values with NaN for easier processing
-                dem = np.where(dem == self.nodata, np.nan, dem)
+                self.dem = np.where(np.isin(dem, self.noData), np.nan, dem)
                 
                 self.delta_x = self.transform[0]
                 self.delta_y = -self.transform[4]
-                self.N, self.M = dem.shape
+                self.N, self.M = self.dem.shape
                 self.xllcorner = self.transform[2]
                 self.yllcorner = self.transform[5] - self.delta_y * self.N
                 # self.dr_pt = np.full((self.N * self.M), None, dtype =object)
@@ -80,8 +80,8 @@ class LoadData:
                 
                 for id_i in tqdm(range(self.N), desc="Loading DEM", unit="row"):
                     for id_j in range(self.M):
-                        elevation = dem[id_i, id_j]
-                        if elevation != self.nodata and not np.isnan(elevation)  :
+                        elevation = self.dem[id_i, id_j]
+                        if elevation not in self.noData and not np.isnan(elevation)  :
                             # Create a DrainagePoint (id_pnt starts at 1)
                             self.n_drpt += 1
                             dp = DrainagePoint(

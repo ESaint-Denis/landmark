@@ -44,7 +44,7 @@ if __name__ == "__main__":
     # dtm_path = "../../QGIS/out/cordevole_debug_riquiqui.tif"
     # dtm_path = "../../QGIS/out/cordevole_debug_mini_mini.tif"
     # dtm_path = "../../QGIS/out/cordevole_debug.tif"
-    dtm_path = "../../QGIS/out/BDALTIV2_25M_D076_fusion_extrait.tif"
+    dtm_path = "../../QGIS/out/BDALTI_france_reech200m.tif"
 
 
     
@@ -67,6 +67,9 @@ if __name__ == "__main__":
     endo_points_HSO_path  = f"../../out_scripts_test_temp/endo_points_HSO{file_name[:-4]}_test"
 
     
+    #NoData values in the DEM
+    noData = [-9999, 0]
+
     #Landmarks option (for now, only the choices indicated are coded)
     main_channel_choice =2 #area:0, length:1, hso:2
     type_of_landscape = 0 #Natural drainage basin:0, Flood Plane:1
@@ -91,35 +94,36 @@ if __name__ == "__main__":
     model_geotiff.hso_th = HSO_th
     model_geotiff.curvature_slope = calculate_curvature_slope
     model_geotiff.n_pts_calc_slope = n_pts_calc_slope
+    model_geotiff.noData = noData
     
     
     print("Loading data...")
     model_geotiff.read_geotiff(dtm_path)
     
-    print("Calculating slopelines...")
-    calculate_slopelines(model_geotiff)
+    # print("Calculating slopelines...")
+    # calculate_slopelines(model_geotiff)
     
         
-    print("Calculating the length of the path between each DTM cell and the outflow point even if the basin is endorheic ")
-    dpl(model_geotiff)
+    # print("Calculating the length of the path between each DTM cell and the outflow point even if the basin is endorheic ")
+    # dpl(model_geotiff)
     
-    print ("calculates the mutual distance between the two neighbor drainage points")
-    mutual_dist(model_geotiff)
+    # print ("calculates the mutual distance between the two neighbor drainage points")
+    # mutual_dist(model_geotiff)
     
     
-    print("Delineating endorheic basins")
-    endo_del(model_geotiff)
+    # print("Delineating endorheic basins")
+    # endo_del(model_geotiff)
         
     
-    print("Connect basin by sadlle spill")
-    saddle_spill(model_geotiff)
+    # print("Connect basin by sadlle spill")
+    # saddle_spill(model_geotiff)
     
      
-    print("Define the relationship between ridge points")
-    find_ridge_neighbors(model_geotiff)
+    # print("Define the relationship between ridge points")
+    # find_ridge_neighbors(model_geotiff)
 
-    print("Ridge hierarchization")
-    ridge_hier(model_geotiff)
+    # print("Ridge hierarchization")
+    # ridge_hier(model_geotiff)
     
     
     
@@ -141,14 +145,14 @@ if __name__ == "__main__":
     # model_geotiff.export_saddle_points(saddle_points_HSO_path)
 
     
-    print("\nExport ridges points HSO")
-    model_geotiff.export_ridge_point(ridge_points_HSO_path)
+    # print("\nExport ridges points HSO")
+    # model_geotiff.export_ridge_point(ridge_points_HSO_path)
     
     # print("Export ridgelines HSO")
     # model_geotiff.export_ridgelines(ridgelines_HSO_path)
     
-    print("Export ridgelines single element HSO")
-    model_geotiff.export_ridgelines_single_element(ridgelines_se_HSO_path)
+    # print("Export ridgelines single element HSO")
+    # model_geotiff.export_ridgelines_single_element(ridgelines_se_HSO_path)
     
     end_time = datetime.now()
     duration = end_time - start_time
